@@ -298,6 +298,7 @@
 	"item.environmental.duck_spawn_egg": "Duck Spawn Egg",
 	"item.environmental.deer_spawn_egg": "Deer Spawn Egg",
 	"item.environmental.yak_spawn_egg": "Yak Spawn Egg",
+	"item.environmental.fennec_fox_spawn_egg": "Fennec Fox Spawn Egg",
 	
 	"item.environmental.cattail_seeds": "Cattail Seeds",
   "item.environmental.rice_ball": "Rice Ball",
@@ -346,6 +347,7 @@
 	"entity.environmental.butterfly": "Butterfly",
 	"entity.environmental.deer": "Deer",
 	"entity.environmental.yak": "Yak",
+	"entity.environmental.fennec_fox": "Fennec Fox",
 	
 	"entity.minecraft.villager.environmental.ceramist": "Ceramist",
 	"entity.minecraft.villager.environmental.carpenter": "Carpenter",
