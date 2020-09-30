@@ -232,11 +232,6 @@
 	"block.environmental.tall_cattail": "Tall Cattail",
 	"block.environmental.potted_cattail": "Potted Cattail",
 	
-	"block.environmental.thatch": "Thatch",
-  "block.environmental.thatch_slab": "Thatch Slab",
-  "block.environmental.thatch_stairs": "Thatch Stairs",
-  "block.environmental.thatch_vertical_slab": "Thatch Vertical Slab",
-  
   "block.environmental.grass_thatch": "Grass Thatch",
   "block.environmental.grass_thatch_slab": "Grass Thatch Slab",
   "block.environmental.grass_thatch_stairs": "Grass Thatch Stairs",
@@ -256,7 +251,8 @@
 	"block.environmental.cartwheel" : "Cartwheel",
 	"block.environmental.bluebell" : "Bluebell",
 	"block.environmental.violet": "Violet",
-	"block.environmental.lotus_flower" : "Lotus Flower",
+	"block.environmental.red_lotus_flower" : "Red Lotus Flower",
+	"block.environmental.white_lotus_flower" : "White Lotus Flower",
 	"block.environmental.dianthus" : "Dianthus",
 	"block.environmental.bird_of_paradise" : "Bird of Paradise",
 	"block.environmental.yellow_hibiscus" : "Yellow Hibiscus",
@@ -270,11 +266,14 @@
 	"block.environmental.mycelium_path": "Mycelium Path",
 	"block.environmental.mycelium_sprouts": "Mycelium Sprouts",
 	"block.environmental.giant_tall_grass": "Giant Tall Grass",
+	"block.environmental.tall_dead_bush": "Tall Dead Bush",
 	
 	"block.environmental.large_lily_pad": "Large Lily Pad",
 	"block.environmental.giant_lily_pad": "Giant Lily Pad",
 	
 	"block.environmental.cherry_crate": "Cherry Crate",
+	"block.environmental.yak_hair_block": "Yak Hair Block",
+	 "block.environmental.yak_hair_rug": "Yak Hair Rug",
 	
 	"block.environmental.rice_sack": "Rice Sack",
 	"block.environmental.rice": "Rice",
@@ -285,6 +284,17 @@
 	"block.environmental.duckweed_thatch_slab": "Duckweed Thatch Slab",
 	"block.environmental.duckweed_thatch_stairs": "Duckweed Thatch Stairs",
 	"block.environmental.duckweed_thatch_vertical_slab": "Duckweed Thatch Vertical Slab",
+	
+	"block.environmental.twig_nest": "Twig Nest",
+	"block.environmental.twig_chicken_nest": "Twig Nest with Chicken Eggs",
+	"block.environmental.twig_duck_nest": "Twig Nest with Duck Eggs",
+	"block.environmental.hay_nest": "Hay Nest",
+	"block.environmental.hay_chicken_nest": "Hay Nest with Chicken Eggs",
+	"block.environmental.hay_duck_nest": "Hay Nest with Duck Eggs",
+	
+	"block.environmental.chicken_egg_crate": "Chicken Egg Crate",
+	"block.environmental.duck_egg_crate": "Duck Egg Crate",
+	"block.environmental.turtle_egg_crate": "Turtle Egg Crate",
 		
 	"item.environmental.wanderer_boots": "Wanderer's Boots",
 	"item.environmental.architect_belt": "Architect's Belt",
@@ -300,6 +310,9 @@
 	"item.environmental.yak_spawn_egg": "Yak Spawn Egg",
 	"item.environmental.fennec_fox_spawn_egg": "Fennec Fox Spawn Egg",
 	
+	"item.environmental.yak_hair": "Yak Hair",
+	"item.environmental.yak_pants": "Yak Pants",
+	
 	"item.environmental.cattail_seeds": "Cattail Seeds",
   "item.environmental.rice_ball": "Rice Ball",
   
@@ -307,6 +320,11 @@
 	"item.environmental.cooked_venison": "Cooked Venison",
 	"item.environmental.duck": "Raw Duck",
   "item.environmental.cooked_duck": "Cooked Duck",
+  "item.environmental.duck_egg": "Duck Egg",
+	
+	"item.minecraft.egg": "Chicken Egg",
+	"item.environmental.fried_egg": "Fried Egg",
+	"item.environmental.scrambled_eggs": "Scrambled Eggs",
 	
 	"item.environmental.cod_kelp_roll": "Cod Kelp Roll",
 	"item.environmental.tropical_fish_kelp_roll": "Tropical Fish Kelp Roll",
@@ -422,7 +440,7 @@
 	"entity.environmental.slabfish.type.mire": "Mire",
 	"entity.environmental.slabfish.type.blossom": "Blossom",
 	"entity.environmental.slabfish.type.maple": "Maple Forest",
-  "entity.environmental.slabfish.type.rosewood": "Rosewood Forest",
+  "entity.environmental.slabfish.type.rainforest": "Rainforest",
   "entity.environmental.slabfish.type.dunes": "Dunes",
   
   "entity.environmental.slabfish.type.nether": "Nether",

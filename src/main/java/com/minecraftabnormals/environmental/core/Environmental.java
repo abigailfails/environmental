@@ -26,10 +26,13 @@ import com.minecraftabnormals.environmental.core.registry.EnvironmentalVillagers
 import com.teamabnormals.abnormals_core.core.utils.RegistryHelper;
 
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -47,7 +50,6 @@ import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
-@SuppressWarnings("deprecation")
 @Mod(Environmental.MODID)
 @Mod.EventBusSubscriber(modid = Environmental.MODID)
 public class Environmental
@@ -98,17 +100,19 @@ public class Environmental
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> 
         {
             modEventBus.addListener(this::setupClient);
+            modEventBus.addListener(this::stitchTextures);
             modEventBus.addListener(this::registerItemColors);
         });
 
         modEventBus.addListener((ModConfig.ModConfigEvent event) -> 
         {
-			if (event.getConfig().getSpec() == EnvironmentalConfig.COMMON_SPEC) {
+			if (event.getConfig().getSpec() == EnvironmentalConfig.CLIENT_SPEC) {
 				EnvironmentalConfig.onConfigReload(event);
 			}
 		});
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EnvironmentalConfig.COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, EnvironmentalConfig.CLIENT_SPEC);
     }
 
     private void setupCommon(final FMLCommonSetupEvent event) 
@@ -133,10 +137,10 @@ public class Environmental
         });
     }
 
+    @OnlyIn(Dist.CLIENT)
     private void setupClient(final FMLClientSetupEvent event)
     {
         EnvironmentalEntities.registerRendering();
-        EnvironmentalClient.removeRecipeBookWarnings();
         DeferredWorkQueue.runLater(() ->
         {
             EnvironmentalClient.setRenderLayers();
@@ -204,6 +208,15 @@ public class Environmental
                 markAsLoginPacket().
                 consumer(FMLHandshakeHandler.biConsumerFor((__, msg, ctx) -> SSyncBackpackTypeMessage.handleLogin(msg, ctx))).
                 add();
+    }
+    
+    private void stitchTextures(TextureStitchEvent.Pre event) {
+        AtlasTexture texture = event.getMap();
+        if (PlayerContainer.LOCATION_BLOCKS_TEXTURE.equals(texture.getTextureLocation())) {
+            event.addSprite(new ResourceLocation(Environmental.MODID, "item/slabfish_sweater_slot"));
+            event.addSprite(new ResourceLocation(Environmental.MODID, "item/slabfish_backpack_slot"));
+            event.addSprite(new ResourceLocation(Environmental.MODID, "item/slabfish_backpack_type_slot"));
+        }
     }
 
     @OnlyIn(Dist.CLIENT)

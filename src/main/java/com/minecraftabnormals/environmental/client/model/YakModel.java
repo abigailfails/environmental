@@ -3,6 +3,8 @@ package com.minecraftabnormals.environmental.client.model;
 import com.minecraftabnormals.environmental.common.entity.YakEntity;
 import net.minecraft.client.renderer.entity.model.QuadrupedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * YakModel - Hatsondogs
@@ -10,9 +12,11 @@ import net.minecraft.client.renderer.model.ModelRenderer;
  *
  * @param <E>
  */
+@OnlyIn(Dist.CLIENT)
 public class YakModel<E extends YakEntity> extends QuadrupedModel<E> {
-
-	//private float headRotationAngleX;
+	private static final float RELATIVE_HEAD_Y = 3.0F;
+	private static final float ADULT_EAT_OFFSET_MULTIPLIER = 9.0F;
+	private static final float CHILD_EAT_OFFSET_MULTIPLIER = 4.5F;
 
 	public YakModel() {
 		super(12, 0.0F, false, 10.0F, 5.5F, 2.0F, 2.0F, 24);
@@ -82,16 +86,11 @@ public class YakModel<E extends YakEntity> extends QuadrupedModel<E> {
 		--this.legFrontLeft.rotationPointZ;
 	}
 
-//	@Override
-//	public void setLivingAnimations(E entity, float limbSwing, float limbSwingAmount, float partialTicks) {
-//		super.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTicks);
-//		this.headModel.rotationPointY = 6.0F + entity.getHeadRotationPointY(partialTicks) * 9.0F;
-//		this.headRotationAngleX = entity.getHeadRotationAngleX(partialTicks);
-//	}
-//
-//	@Override
-//	public void setRotationAngles(E entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-//		super.setRotationAngles(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-//		this.headModel.rotateAngleX = this.headRotationAngleX;
-//	}
+	@Override
+	public void setRotationAngles(E yak, float limbSwing, float limbSwingAmount, float ageInTicks, float yaw, float pitch) {
+		super.setRotationAngles(yak, limbSwing, limbSwingAmount, ageInTicks, yaw, pitch);
+		float partialTicks = ageInTicks - yak.ticksExisted;
+		this.headModel.rotationPointY = RELATIVE_HEAD_Y + yak.getHeadEatingOffset(partialTicks) * (yak.isChild() ? CHILD_EAT_OFFSET_MULTIPLIER : ADULT_EAT_OFFSET_MULTIPLIER);
+		this.headModel.rotateAngleX = yak.getHeadPitch(partialTicks);
+	}
 }

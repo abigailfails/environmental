@@ -1,12 +1,25 @@
 package com.minecraftabnormals.environmental.common.block;
 
-import net.minecraft.block.*;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
+import com.minecraftabnormals.environmental.core.registry.EnvironmentalBlocks;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.BushBlock;
+import net.minecraft.block.FarmlandBlock;
+import net.minecraft.block.IGrowable;
+import net.minecraft.block.IWaterLoggable;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -18,13 +31,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-
-import javax.annotation.Nullable;
-
-import com.minecraftabnormals.environmental.core.other.EnvironmentalTags;
-import com.minecraftabnormals.environmental.core.registry.EnvironmentalBlocks;
-
-import java.util.Random;
+import net.minecraftforge.common.Tags;
 
 public class CattailSproutsBlock extends BushBlock implements IWaterLoggable, IGrowable {
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
@@ -43,7 +50,7 @@ public class CattailSproutsBlock extends BushBlock implements IWaterLoggable, IG
     @Override
     protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
         Block block = state.getBlock();
-        return block.isIn(EnvironmentalTags.Blocks.CATTAIL_PLANTABLE_ON);
+        return block.isIn(Tags.Blocks.DIRT) || block.isIn(BlockTags.SAND) || block instanceof FarmlandBlock;
     }
 
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
@@ -71,7 +78,6 @@ public class CattailSproutsBlock extends BushBlock implements IWaterLoggable, IG
         worldIn.setBlockState(pos, EnvironmentalBlocks.CATTAIL.get().getDefaultState().with(WATERLOGGED, state.get(WATERLOGGED)));
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random) {
         super.tick(state, worldIn, pos, random);
@@ -89,7 +95,6 @@ public class CattailSproutsBlock extends BushBlock implements IWaterLoggable, IG
         return this.isValidGround(world.getBlockState(pos.down()), world, pos);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public FluidState getFluidState(BlockState state) {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);

@@ -6,10 +6,13 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * WandererBootsModel - Farcr
  */
+@OnlyIn(Dist.CLIENT)
 public class WandererBootsModel<T extends LivingEntity> extends BipedModel<T> {
 	private final ModelRenderer leftLeg;
 	private final ModelRenderer leftToe;
@@ -45,10 +48,9 @@ public class WandererBootsModel<T extends LivingEntity> extends BipedModel<T> {
 		
 		matrixStack.push();
 		matrixStack.scale(1.1F, 1.0F, 1.1F);
-		matrixStack.pop();
-		
 		this.leftLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
 		this.rightLeg.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+		matrixStack.pop();
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

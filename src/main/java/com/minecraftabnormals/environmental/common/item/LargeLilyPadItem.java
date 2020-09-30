@@ -1,9 +1,9 @@
 package com.minecraftabnormals.environmental.common.item;
 
 import com.minecraftabnormals.environmental.common.block.LargeLilyPadBlock;
+import com.minecraftabnormals.environmental.core.registry.EnvironmentalBlocks;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.FluidState;
@@ -26,8 +26,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class LargeLilyPadItem extends BlockItem {
-    public LargeLilyPadItem(Block blockIn, Item.Properties builder) {
-        super(blockIn, builder);
+    public LargeLilyPadItem(Item.Properties builder) {
+        super(EnvironmentalBlocks.LARGE_LILY_PAD.get(), builder);
     }
 
     public ActionResultType onItemUse(ItemUseContext context) {
@@ -54,7 +54,8 @@ public class LargeLilyPadItem extends BlockItem {
 
                     // special case for handling block placement with water lilies
                     net.minecraftforge.common.util.BlockSnapshot blocksnapshot = net.minecraftforge.common.util.BlockSnapshot.create(worldIn, blockpos1);
-                    LargeLilyPadBlock.placeAt(worldIn, blockpos1, this.getBlock().getDefaultState(), 18);
+                    if (!worldIn.isRemote())
+                    	LargeLilyPadBlock.placeAt(worldIn, blockpos1, this.getBlock().getDefaultState(), 18);
                     if (net.minecraftforge.event.ForgeEventFactory.onBlockPlace(playerIn, blocksnapshot, net.minecraft.util.Direction.UP)) {
                         blocksnapshot.restore(true, false);
                         return ActionResult.resultFail(itemstack);

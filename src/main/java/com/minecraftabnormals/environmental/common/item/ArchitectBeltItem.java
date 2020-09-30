@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
 import com.minecraftabnormals.environmental.client.model.ArchitectBeltModel;
 import com.minecraftabnormals.environmental.core.Environmental;
+import com.minecraftabnormals.environmental.core.other.EnvironmentalTiers;
 import com.minecraftabnormals.environmental.core.registry.EnvironmentalEnchantments;
 
 import net.minecraft.client.renderer.entity.model.BipedModel;
@@ -17,18 +18,20 @@ import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
 
 public class ArchitectBeltItem extends ArmorItem {
 
 	public ArchitectBeltItem(Properties properties) {
-		super(ArmorMaterial.LEATHER, EquipmentSlotType.LEGS, properties);
+		super(EnvironmentalTiers.Armor.EXPLORER, EquipmentSlotType.LEGS, properties);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack stack, EquipmentSlotType armorSlot, A _default) {
 		return (A) new ArchitectBeltModel(1.0F);
 	}

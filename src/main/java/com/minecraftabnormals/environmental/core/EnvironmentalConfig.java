@@ -2,18 +2,14 @@ package com.minecraftabnormals.environmental.core;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.minecraftabnormals.environmental.core.registry.EnvironmentalBlocks;
+import com.minecraftabnormals.environmental.core.registry.EnvironmentalBiomes;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.world.biome.Biome;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.registries.ForgeRegistries;
 
 @EventBusSubscriber(modid = Environmental.MODID)
 public class EnvironmentalConfig {
@@ -31,13 +27,8 @@ public class EnvironmentalConfig {
         public final ConfigValue<Integer> blossomHighlandsWeight;
         public final ConfigValue<Integer> blossomValleysWeight;
         
-        public final ConfigValue<Boolean> renameThatch;
-        
-        public final ConfigValue<Boolean> customFogs;
-        public final ConfigValue<Integer> desertFog;
-        public final ConfigValue<Integer> jungleFog;
-        public final ConfigValue<Integer> snowyFog;
-        public final ConfigValue<Integer> swampFog;
+        public final ConfigValue<Boolean> limitFarmAnimalSpawns;
+        public final ConfigValue<Boolean> biomeVariantsAlwaysSpawn;
 
         Common(ForgeConfigSpec.Builder builder) {
         	builder.push("worldgen");
@@ -56,64 +47,60 @@ public class EnvironmentalConfig {
             	builder.push("features");
             		generateExtraWisterias = builder.define("Wisteria Tree generation out of Flower Forests", false);
             		generateGiantMushroomsInSwamps = builder.define("Giant Mushroom generation in Swamps", true);
-            		generateGiantTallGrass = builder.define("Giant Tall Grass generation", true);
-            	builder.pop();
-            	builder.push("fog");
-            		customFogs = builder.define("Enable Custom Fogs", true);
-            		builder.push("values");
-            			desertFog = builder.define("Desert Fog decimal value", 14539186);
-            			jungleFog = builder.define("Jungle Fog decimal value", 11591080);
-            			snowyFog = builder.define("Snowy Fog decimal value", 16777215);
-            			swampFog = builder.define("Swamp Fog decimal value", 11595468);
-            		builder.pop();
+            		generateGiantTallGrass = builder.define("Giant Tall Grass generation", true);            	
             	builder.pop();
             builder.pop();
             
-            builder.push("misc");
-            	renameThatch = builder.define("If Thatch is renamed to Grass Thatch", ModList.get().isLoaded("quark"));
+            builder.push("entities");
+            limitFarmAnimalSpawns = builder.comment("Make farm animals spawn in less biomes to allow new mobs to take their place and diversify biome spawns").define("Limit farm animal spawns", true);
+            biomeVariantsAlwaysSpawn = builder.comment("Make biome variants of mobs like Husk always spawn in place of their original in their biomes").define("Biome variants always spawn", true);
             builder.pop();
+        }
+    }
+    
+    public static class Client {
+
+        public final ConfigValue<Boolean> customFogColors;
+        public final ConfigValue<Integer> desertFog;
+        public final ConfigValue<Integer> jungleFog;
+        public final ConfigValue<Integer> snowyFog;
+        public final ConfigValue<Integer> swampFog;
+        
+        public final ConfigValue<Boolean> bedrockWaterColors;
+    
+        Client(ForgeConfigSpec.Builder builder) {
+        	builder.push("ambience");
+	    		bedrockWaterColors = builder.define("Enable Bedrock water colors", true);
+	    		customFogColors = builder.define("Enable custom fog colors", true);
+	    		builder.push("fogs");
+	    			desertFog = builder.define("Desert Fog decimal value", 14539186);
+	    			jungleFog = builder.define("Jungle Fog decimal value", 11591080);
+	    			snowyFog = builder.define("Snowy Fog decimal value", 16777215);
+	    			swampFog = builder.define("Swamp Fog decimal value", 11595468);
+	    		builder.pop();
+        	builder.pop();
         }
     }
     
     public static final ForgeConfigSpec COMMON_SPEC;
     public static final Common COMMON;
+    
+    public static final ForgeConfigSpec CLIENT_SPEC;
+    public static final Client CLIENT;
 
     static {
-        final Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
-        COMMON_SPEC = specPair.getRight();
-        COMMON = specPair.getLeft();
+        final Pair<Common, ForgeConfigSpec> commonSpecPair = new ForgeConfigSpec.Builder().configure(Common::new);
+        COMMON_SPEC = commonSpecPair.getRight();
+        COMMON = commonSpecPair.getLeft();
+        
+        final Pair<Client, ForgeConfigSpec> clientSpecPair = new ForgeConfigSpec.Builder().configure(Client::new);
+        CLIENT_SPEC = clientSpecPair.getRight();
+        CLIENT = clientSpecPair.getLeft();
     }
     
+    @OnlyIn(Dist.CLIENT)
     public static void onConfigReload(final ModConfig.ModConfigEvent event) {
-    	boolean renameThatch = EnvironmentalConfig.COMMON.renameThatch.get();
-    	createAltName(renameThatch, EnvironmentalBlocks.THATCH.get(), "grass_thatch");
-		createAltName(renameThatch, EnvironmentalBlocks.THATCH_SLAB.get(), "grass_thatch_slab");
-		createAltName(renameThatch, EnvironmentalBlocks.THATCH_STAIRS.get(), "grass_thatch_stairs");
-		createAltName(renameThatch, EnvironmentalBlocks.THATCH_VERTICAL_SLAB.get(), "grass_thatch_vertical_slab");
-		
-		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
-			Biome.Category category = biome.getCategory();
-			
-			if(category == Biome.Category.DESERT) replaceFogValue(biome, EnvironmentalConfig.COMMON.desertFog);
-			if(category == Biome.Category.JUNGLE) replaceFogValue(biome, EnvironmentalConfig.COMMON.jungleFog);
-			if(category == Biome.Category.ICY) replaceFogValue(biome, EnvironmentalConfig.COMMON.snowyFog);
-			if(category == Biome.Category.SWAMP) replaceFogValue(biome, EnvironmentalConfig.COMMON.swampFog);
-		}
-	}
-    
-    private static void replaceFogValue(Biome biome, ConfigValue<Integer> config) {
-    	if (EnvironmentalConfig.COMMON.customFogs.get()) {
-    		biome.field_235052_p_.fogColor = config.get();
-    	} else {
-    		biome.field_235052_p_.fogColor = 12638463;
-    	}
-    }
-	
-	private static void createAltName(boolean criteria, Block block, String name) {
-		if (criteria) {
-			block.translationKey = Util.makeTranslationKey("block", new ResourceLocation(Environmental.MODID, name));
-		} else {
-			block.translationKey = Util.makeTranslationKey("block", block.getRegistryName());
-		}
+		EnvironmentalBiomes.replaceBiomeFogColors();
+		EnvironmentalBiomes.replaceBiomeWaterColors();
 	}
 }
